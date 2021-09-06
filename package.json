@@ -22,7 +22,7 @@
     "@types/tailwindcss": "^2.2.1",
     "@vitejs/plugin-vue": "^1.6.0",
     "@vue-leaflet/vue-leaflet": "^0.6.1",
-    "@vue/compiler-sfc": "^3.2.8",
+    "@vue/compiler-sfc": "^3.2.9",
     "autoprefixer": "^10.3.4",
     "tailwindcss": "^2.2.9",
     "vite": "^2.5.3"
