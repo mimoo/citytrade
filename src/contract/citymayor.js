@@ -68,15 +68,15 @@ export async function get_cities(contract) {
     let cities_resp = await contract.queryFilter(filter_cities);
     for (let city of cities_resp) {
         // parse the event
-        let city_id = city.args.cityId;
-        let city_id_str = city_id.toString();
+        let raw_city_id = city.args.cityId;
+        let city_id_str = raw_city_id.toString();
         let name = city.args.name;
         let price = ethers.utils.formatEther(city.args.price.toString());
         let country_id = city.args.countryId;
 
         cities[city_id_str] = {
-            city_id: city_id,
-            country_id: country_id,
+            raw_city_id,
+            country_id,
             name: name,
             owner: null,
 
@@ -90,7 +90,7 @@ export async function get_cities(contract) {
 }
 
 // fetch more metadata about a single city (current owner, current price, etc.)
-export async function get_city(contract, cities, city_id) {
+export async function get_city(contract, city_id) {
     // every city has more current information in the `cities` array
     let info = await contract.cities(city_id)
 
@@ -105,8 +105,8 @@ export async function get_city(contract, cities, city_id) {
         buyable = ethers.utils.formatEther(info.price.toString());
     }
 
-    // modifies cities in place
-    cities[city_id_str] = {
+    // return
+    return {
         owner,
         owner_ens,
         buyable,

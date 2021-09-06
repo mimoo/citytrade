@@ -36,14 +36,20 @@ export const useStore = defineStore('main', {
         async init() {
             let contract = init_contract();
 
-            // get citieas quickly
+            // get cities quickly
             this.cities = await get_cities(contract);
 
             // get offers
             let { pending, city_sold, offers, void_offers, offers_cancelled } = await get_offers(contract);
             this.offers.pending = pending;
 
-
+            // now get more information on each city
+            for (const [city_id, city] of Object.entries(this.cities)) {
+                let { owner, owner_ens, buyable } = await get_city(contract, city.raw_city_id);
+                this.cities[city_id].owner = owner;
+                this.cities[city_id].owner_ens = owner_ens;
+                this.cities[city_id].buyable = buyable;
+            }
         }
     }
 })

@@ -1,18 +1,24 @@
-import Home from './views/Home.vue'
-import About from './views/About.vue'
+import Browse from './views/Browse.vue'
+import Buy from './views/Buy.vue'
+import HowTo from './views/HowTo.vue'
 import NotFound from './views/NotFound.vue'
 
 /** @type {import('vue-router').RouterOptions['routes']} */
 export const routes = [
-  { path: '/', component: Home, meta: { title: 'Home' } },
+  { path: '/', component: Browse, meta: { title: 'Browse' } },
   {
-    path: '/about',
-    meta: { title: 'About' },
-    component: About,
+    path: '/Buy',
+    meta: { title: 'Buy' },
+    component: Buy,
     // example of route level code-splitting
-    // this generates a separate chunk (About.[hash].js) for this route
+    // this generates a separate chunk (Buy.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    // component: () => import('./views/About.vue')
+    // component: () => import('./views/Buy.vue')
+  },
+  {
+    path: '/HowTo',
+    meta: { title: 'HowTo' },
+    component: HowTo,
   },
   { path: '/:path(.*)', component: NotFound },
 ]
