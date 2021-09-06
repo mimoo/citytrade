@@ -12,5 +12,5 @@ export default defineConfig({
   server: {
     open: true,
   },
-  base: './citytrade/'
+  base: '/citytrade/'
 })
