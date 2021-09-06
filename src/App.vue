@@ -1,27 +1,50 @@
 <script setup>
-import { ref } from 'vue'
+import { useStore } from '@/stores/cities'
+import { ref, onMounted, watch, toRefs } from 'vue'
+
+
+const store = useStore();
+store.init();
 
 let counter = ref(0)
-
-setInterval(() => {
-  counter.value++
-}, 1000)
 </script>
 
 <template>
-  <div>
-    <header class="bg-white shadow" v-if="$route.meta.title">
-      <div class="px-4 py-6 mx-auto max-w-7xl sm:px-6 lg:px-8">
-        <h1
-          @click="counter = 0"
-          class="text-3xl font-bold leading-tight text-gray-900"
+  <header class="text-gray-600 body-font">
+    <div class="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
+      <a class="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          class="w-10 h-10 text-white p-2 bg-indigo-500 rounded-full"
+          viewBox="0 0 24 24"
         >
-          {{ $route.meta.title }} / {{ counter }}
-        </h1>
-      </div>
-    </header>
-    <main>
-      <router-view />
-    </main>
-  </div>
+          <path d="M5 5L5 5l5 10 10-5-10-5zM2 15l20 0" />
+        </svg>
+        <span class="ml-3 text-xl">
+          City
+          <span class="text-indigo-600">Trade</span>
+        </span>
+      </a>
+      <nav
+        class="md:mr-auto md:ml-4 md:py-1 md:pl-4 md:border-l md:border-gray-400 flex flex-wrap items-center text-base justify-center"
+      >
+        <a class="mr-5 hover:text-gray-900">Buy</a>
+        <a class="mr-5 hover:text-gray-900">Sell</a>
+        <a class="mr-5 hover:text-gray-900">Send CITY</a>
+        <a class="mr-5 hover:text-gray-900">Receive CITY</a>
+      </nav>
+      <button
+        class="inline-flex items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0"
+      >Register</button>
+    </div>
+  </header>
+
+  <main>
+    <router-view />
+  </main>
 </template>
