@@ -1,12 +1,21 @@
 <script setup>
+
 import { useStore } from '@/stores/cities'
 import { ref, onMounted, watch, toRefs } from 'vue'
-
+import { signer, user_address } from '@/contract/eth_provider.js'
 
 const store = useStore();
 store.init();
 
 let counter = ref(0)
+
+let user = ref(null);
+
+onMounted(async () => {
+  const res = await user_address(signer)
+  user.value = res.substr(0, 10) + "...";
+  console.log(res);
+});
 </script>
 
 <template>
@@ -42,7 +51,10 @@ let counter = ref(0)
       </nav>
       <button
         class="inline-flex items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0"
-      >Register</button>
+      >
+        <span v-if="user">{{ user }}</span>
+        <span v-else>Register</span>
+      </button>
     </div>
   </header>
 
