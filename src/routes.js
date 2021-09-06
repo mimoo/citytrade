@@ -1,6 +1,7 @@
 import Browse from './views/Browse.vue'
 import Buy from './views/Buy.vue'
 import HowTo from './views/HowTo.vue'
+import Map from './views/Map.vue'
 import NotFound from './views/NotFound.vue'
 
 /** @type {import('vue-router').RouterOptions['routes']} */
@@ -19,6 +20,11 @@ export const routes = [
     path: '/HowTo',
     meta: { title: 'HowTo' },
     component: HowTo,
+  },
+  {
+    path: '/Map',
+    meta: { title: 'Map' },
+    component: Map,
   },
   { path: '/:path(.*)', component: NotFound },
 ]

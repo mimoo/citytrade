@@ -11,7 +11,13 @@ const { cities } = storeToRefs(store);
 <template>
   <section class="text-gray-600 body-font">
     <div class="container px-5 py-24 mx-auto">
-      <div class="flex flex-wrap -m-4">
+      all cities | largest offers |
+      <router-link to="/map" class="mr-5 hover:text-gray-900">map</router-link>
+      <div class="h-1 bg-gray-200 rounded overflow-hidden mt-3">
+        <div class="w-24 h-full bg-indigo-500"></div>
+      </div>
+
+      <div class="flex flex-wrap -m-4 mt-2">
         <div class="lg:w-1/4 md:w-1/2 p-4 w-full" v-for="c in cities">
           <a class="block relative h-48 rounded overflow-hidden">
             <img
