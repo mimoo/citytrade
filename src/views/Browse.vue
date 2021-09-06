@@ -9,7 +9,6 @@ const { cities } = storeToRefs(store);
 </script>
 
 <template>
-  <h1>Cities</h1>
   <section class="text-gray-600 body-font">
     <div class="container px-5 py-24 mx-auto">
       <div class="flex flex-wrap -m-4">
@@ -18,7 +17,7 @@ const { cities } = storeToRefs(store);
             <img
               alt="ecommerce"
               class="object-cover object-center w-full h-full block"
-              src="https://dummyimage.com/420x260"
+              :src="'https://source.unsplash.com/random/?city,' + c.name"
             />
           </a>
           <div class="mt-4">
