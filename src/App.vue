@@ -2,7 +2,8 @@
 
 import { useStore } from '@/stores/cities'
 import { ref, onMounted, watch, toRefs } from 'vue'
-import { get_provider, get_signer, user_address } from '@/contract/eth_provider.js'
+import { get_provider, get_signer, user_address } from '@/contract/eth_provider'
+import { init_contract } from '@/contract/citymayor'
 
 const store = useStore();
 store.init();
@@ -13,7 +14,12 @@ let user = ref(null);
 
 onMounted(async () => {
   const provider = await get_provider();
-  const signer = await get_signer(provider);
+  const contract = await init_contract(provider);
+  const { signer, contract_signer } = await get_signer(provider, contract);
+
+  window.signer = signer;
+  window.contract_signer = contract_signer;
+
   const res = await user_address(signer)
   user.value = res.substr(0, 10) + "...";
   console.log(res);

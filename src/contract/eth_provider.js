@@ -37,11 +37,11 @@ export async function check_network(provider) {
 }
 
 // get a signer
-export function get_signer(provider) {
+export function get_signer(provider, contract) {
     if (provider !== null) {
         const signer = provider.getSigner();
-        window.signer = signer;
-        return signer;
+        const contract_signer = contract.connect(signer);
+        return { signer, contract_signer };
     } else {
         return null;
     }
