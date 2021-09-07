@@ -9,7 +9,8 @@ export const useStore = defineStore('main', {
             cities: {},
             // list of offers that are still valid
             offers: {
-                pending: []
+                pending: [],
+                sold: [],
             },
             // address -> CITYs
             balances: {}
@@ -30,6 +31,26 @@ export const useStore = defineStore('main', {
                 (offer1.price.gt(offer2.price)) ? -1 : 1
             );
             return pending;
+        },
+        sold: (state) => {
+            console.log("debuf_f", state.offers.sold);
+            let sold = state.offers.sold.map(offer => {
+                let city_id = offer.args.cityId.toString();
+                let city = state.cities[city_id];
+                if (!city) {
+                    console.log("city not found")
+                    return offer;
+                }
+                let name = city.name;
+                let price_str = ethers.utils.formatEther(offer.args.price.toString());
+                let previous_owner = offer.args.previousOwner;
+                let new_owner = offer.args.newOwner;
+                let offer_id = offer.args.offerId.toString();
+                return { name, price_str, city_id, offer_id, previous_owner, new_owner, ...offer };
+            });
+            console.log("debug", sold);
+            sold.reverse();
+            return sold;
         }
     },
     actions: {
@@ -52,6 +73,7 @@ export const useStore = defineStore('main', {
             // get offers
             let { pending, city_sold, offers, void_offers, offers_cancelled } = await get_offers(provider, contract);
             this.offers.pending = pending;
+            this.offers.sold = city_sold;
 
             // now get more information on each city
             for (const [city_id, city] of Object.entries(this.cities)) {

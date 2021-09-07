@@ -114,6 +114,16 @@ export async function get_city(provider, contract, city_id) {
     };
 }
 
+export async function get_block(provider, block_number) {
+    let block = await provider.getBlock(block_number);
+    let timestamp = block.timestamp;
+    let date = new Date(timestamp * 1000).toLocaleDateString("en-US");
+    return {
+        date_str: date,
+        ...block
+    };
+}
+
 // fetch all the historical offers, as well as pending offers
 export async function get_offers(provider, contract) {
     // get all the offers
@@ -135,29 +145,15 @@ export async function get_offers(provider, contract) {
     let city_sold = await contract.queryFilter(filter_city_sold);
     console.log("city_sold:", city_sold);
 
-    /*
-    // display the last 20 purchases
-    for (sold of city_sold.reverse().slice(0, 20)) {
-        // CitySold(uint16 cityId, uint256 price, address previousOwner, address newOwner, uint256 offerId);
-        let city_id = sold.args.cityId.toString();
-        let city = cities[city_id].name;
-        let price = ethers.utils.formatEther(sold.args.price.toString());
-        let previous_owner = sold.args.previousOwner;
-        let new_owner = sold.args.newOwner;
-        let offer_id = sold.args.offerId.toString();
-        let block_number = sold.blockNumber;
-        let block = await provider.getBlock(block_number);
-        let timestamp = block.timestamp;
-        let date = new Date(timestamp * 1000).toLocaleDateString("en-US");
-
-
-        // print to HTML
-        document.querySelector("#sold").innerHTML += `<li>${date} - ${city} was purchased for ${price} ETH by ${new_owner.substring(0, 10)}...</li>`;
-    }
-    */
+    // format
+    city_sold = await Promise.all(city_sold, async (offer) => {
+        let block_number = offer.blockNumber;
+        let block = await get_block(provider, block_number);
+        return { date_str: block.date_str, ...offer };
+    });
 
     // what are the pending offers? (not cancelled or accepted yet)
-    var void_offers = new Set()
+    let void_offers = new Set()
     for (let offer of city_sold) {
         void_offers.add(offer.args.offerId.toString());
     }
