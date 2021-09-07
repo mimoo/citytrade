@@ -4,26 +4,30 @@ import App from './App.vue'
 import { routes } from './routes.js'
 import { createRouter, createWebHistory } from 'vue-router'
 import { createPinia } from 'pinia'
+import { ethers } from 'ethers'
+import { provider } from './contract/eth_provider'
 
-/* debug */
-import { ethers } from "ethers";
-
-// get metamask provider
-window.provider = new ethers.providers.Web3Provider(window.ethereum);
-
-await provider.lookupAddress("0xCF83B1C347C558923860Bd19702D80e86ff81177")
-
-
-/* end debug */
-
-const app = createApp(App)
-
-const router = createRouter({
-  history: createWebHistory(),
-  //  base: "/citytrade/",
-  routes,
+// detect change of metamask account
+window.ethereum.on('accountsChanged', function (accounts) {
+  location.reload();
 })
 
+window.ethereum.on('chainChanged', function (networkId) {
+  location.reload();
+})
+
+// router config
+const router_config = {
+  history: createWebHistory(),
+  routes,
+};
+
+const router = createRouter(
+  (import.meta.env.MODE === 'production') ? { base: "/citytrade/", ...router_config } : router_config
+)
+
+// create app
+const app = createApp(App)
 app.use(router)
 app.use(createPinia())
 app.mount('#app')
