@@ -42,12 +42,12 @@ onMounted(async () => {
       <nav
         class="md:mr-auto md:ml-4 md:py-1 md:pl-4 md:border-l md:border-gray-400 flex flex-wrap items-center text-base justify-center"
       >
-        <router-link to="/" class="mr-5 hover:text-gray-900">Browse</router-link>
+        <router-link :to="{ name: 'browse' }" class="mr-5 hover:text-gray-900">Browse</router-link>
 
-        <router-link to="/buy" class="mr-5 hover:text-gray-900">Buy</router-link>
-        <router-link to="/sell" class="mr-5 hover:text-gray-900">Sell</router-link>
-        <router-link to="/wallet" class="mr-5 hover:text-gray-900">CITY wallet</router-link>
-        <router-link to="/howto" class="mr-5 hover:text-gray-900">How to?</router-link>
+        <router-link :to="{ name: 'buy' }" class="mr-5 hover:text-gray-900">Buy</router-link>
+        <router-link :to="{ name: 'sell' }" class="mr-5 hover:text-gray-900">Sell</router-link>
+        <router-link :to="{ name: 'wallet' }" class="mr-5 hover:text-gray-900">CITY wallet</router-link>
+        <router-link :to="{ name: 'howto' }" class="mr-5 hover:text-gray-900">How to?</router-link>
       </nav>
       <button
         class="inline-flex items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0"

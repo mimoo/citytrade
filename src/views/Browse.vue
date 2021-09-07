@@ -12,7 +12,7 @@ const { cities } = storeToRefs(store);
   <section class="text-gray-600 body-font">
     <div class="container px-5 py-24 mx-auto">
       all cities | largest offers |
-      <router-link to="/map" class="mr-5 hover:text-gray-900">map</router-link>
+      <router-link :to="{ name: 'map' }" class="mr-5 hover:text-gray-900">map</router-link>
       <div class="h-1 bg-gray-200 rounded overflow-hidden mt-3">
         <div class="w-24 h-full bg-indigo-500"></div>
       </div>

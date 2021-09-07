@@ -6,8 +6,14 @@ import NotFound from './views/NotFound.vue'
 
 /** @type {import('vue-router').RouterOptions['routes']} */
 export const routes = [
-  { path: '/', component: Browse, meta: { title: 'Browse' } },
   {
+    name: 'browse',
+    path: '/',
+    component: Browse,
+    meta: { title: 'Browse' }
+  },
+  {
+    name: 'buy',
     path: '/Buy',
     meta: { title: 'Buy' },
     component: Buy,
@@ -17,11 +23,25 @@ export const routes = [
     // component: () => import('./views/Buy.vue')
   },
   {
+    name: 'sell',
     path: '/HowTo',
     meta: { title: 'HowTo' },
     component: HowTo,
   },
   {
+    name: 'wallet',
+    path: '/HowTo',
+    meta: { title: 'HowTo' },
+    component: HowTo,
+  },
+  {
+    name: 'howto',
+    path: '/HowTo',
+    meta: { title: 'HowTo' },
+    component: HowTo,
+  },
+  {
+    name: 'map',
     path: '/Map',
     meta: { title: 'Map' },
     component: Map,

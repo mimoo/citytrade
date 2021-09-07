@@ -20,7 +20,7 @@ const app = createApp(App)
 
 const router = createRouter({
   history: createWebHistory(),
-  base: "/citytrade/",
+  //  base: "/citytrade/",
   routes,
 })
 

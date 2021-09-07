@@ -2,7 +2,7 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import { resolve } from 'path'
 
-export default defineConfig({
+const config = {
   plugins: [vue()],
   resolve: {
     alias: {
@@ -12,5 +12,12 @@ export default defineConfig({
   server: {
     open: true,
   },
-  base: '/citytrade/'
+};
+
+export default defineConfig(({ command, mode }) => {
+  if (command === 'serve') {
+    return config;
+  } else {
+    return { base: '/citytrade/', ...config };
+  }
 })
