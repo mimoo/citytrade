@@ -17,7 +17,7 @@ export async function init_contract(provider) {
 }
 
 // returns the ENS name of an address (reverse lookup) given the 0XDEADBEEF address
-export async function ens_name(address) {
+export async function ens_name(provider, address) {
     let name = await provider.lookupAddress(address);
     if (name == null) {
         return address.substr(0, 10) + "...";
@@ -91,12 +91,12 @@ export async function get_cities(contract) {
 }
 
 // fetch more metadata about a single city (current owner, current price, etc.)
-export async function get_city(contract, city_id) {
+export async function get_city(provider, contract, city_id) {
     // every city has more current information in the `cities` array
     let info = await contract.cities(city_id)
 
     let owner = info.owner;
-    let owner_ens = await ens_name(owner);
+    let owner_ens = await ens_name(provider, owner);
 
     let monuments = info.monuments;
     let last_purchase_price = ethers.utils.formatEther(info.last_purchase_price.toString());
@@ -115,7 +115,7 @@ export async function get_city(contract, city_id) {
 }
 
 // fetch all the historical offers, as well as pending offers
-export async function get_offers(contract) {
+export async function get_offers(provider, contract) {
     // get all the offers
     // event OfferForCity(uint256 offerId, uint16 cityId, uint256 price, address offererAddress, address owner);
     let filter_offers = contract.filters.OfferForCity();
@@ -176,7 +176,7 @@ export async function get_offers(contract) {
         let price = offer.args.price;
         let price_str = ethers.utils.formatEther(price.toString());
         let from = offer.args.offererAddress;
-        let from_ens = await ens_name(from);
+        let from_ens = await ens_name(provider, from);
         let owner = offer.args.owner; // ?
 
         pending.push({

@@ -25,7 +25,7 @@ const { cities } = storeToRefs(store);
         />
       </a>
       <div class="mt-4">
-        <h3 class="text-gray-500 text-xs tracking-widest title-font mb-1">{{ c.owner }}</h3>
+        <h3 class="text-gray-500 text-xs tracking-widest title-font mb-1">{{ c.owner_ens }}</h3>
         <h2 class="text-gray-900 title-font text-lg font-medium">{{ c.name }}</h2>
         <p class="mt-1" v-if="c.buyable">{{ c.buyable }} ETH</p>
         <p class="mt-1" v-else>make an offer</p>

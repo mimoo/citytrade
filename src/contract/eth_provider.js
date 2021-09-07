@@ -6,23 +6,19 @@ window.ethers = ethers;
 
 // connects to metamask, or at least try
 export async function get_provider() {
-    const provider = await detectEthereumProvider();
+    const provider_info = await detectEthereumProvider();
+    console.log(provider_info);
 
-    if (provider) {
-        // From now on, this should always be true:
-        // provider === window.ethereum
-        //        return provider; // initialize your app
-        window.provider = provider;
-    } else {
-        console.log('Please install MetaMask!');
+    if (!provider_info) {
+        console.log("you must have metamask to browse this page");
         return null;
     }
 
-
     try {
-        return new ethers.providers.Web3Provider(window.ethereum);
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        window.provider = provider;
+        return provider;
     } catch (error) {
-        window.alert("you must have metamask to browse this page");
         console.error(error);
         return null;
     }
