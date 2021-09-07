@@ -12,6 +12,10 @@ let counter = ref(0)
 
 let user = ref(null);
 
+function requestEthereum() {
+  window.ethereum.request({ method: 'eth_requestAccounts' });
+}
+
 onMounted(async () => {
   const provider = await get_provider();
   const contract = await init_contract(provider);
@@ -61,7 +65,9 @@ onMounted(async () => {
         class="inline-flex items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0"
       >
         <span v-if="user">{{ user }}</span>
-        <span v-else>Register</span>
+        <span v-else>
+          <a href="#" @click="requestEthereum">Connect Metamask</a>
+        </span>
       </button>
     </div>
   </header>
