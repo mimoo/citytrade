@@ -4,8 +4,6 @@ import App from './App.vue'
 import { routes } from './routes.js'
 import { createRouter, createWebHistory } from 'vue-router'
 import { createPinia } from 'pinia'
-import { ethers } from 'ethers'
-import { provider } from './contract/eth_provider'
 
 // detect change of metamask account
 if (window.ethereum) {
@@ -20,12 +18,12 @@ if (window.ethereum) {
 
 // router config
 const router_config = {
-  history: createWebHistory(),
+  history: createWebHistory("/citytrade/"),
   routes,
 };
 
 const router = createRouter(
-  (import.meta.env.PROD) ? { history: createWebHistory("/citytrade/"), ...router_config } : router_config
+  router_config
 )
 
 // create app

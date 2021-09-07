@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
-import { provider } from '@/contract/eth_provider.js';
 import { init_contract, get_cities, get_offers, get_city, get_balance, ens_name } from '@/contract/citymayor.js';
+import { get_provider } from '@/contract/eth_provider';
 
 export const useStore = defineStore('main', {
     state: () => {
@@ -34,8 +34,15 @@ export const useStore = defineStore('main', {
     },
     actions: {
         async init() {
-            let contract = await init_contract();
+            // init contract
+            let provider = await get_provider();
+            if (provider === null) {
+                console.log("couldn't init store with provider");
+                return;
+            }
+            let contract = await init_contract(provider);
             if (contract == null) {
+                console.log("couldn't init store with contract");
                 return;
             }
 
