@@ -58,8 +58,36 @@ onMounted(async () => {
     </div>
   </header>
 
+  <div class="text-center py-4 lg:px-4">
+    <div
+      class="p-2 bg-indigo-800 items-center text-indigo-100 leading-none lg:rounded-full flex lg:inline-flex"
+      role="alert"
+    >
+      <span class="flex rounded-full bg-indigo-500 uppercase px-2 py-1 text-xs font-bold mr-3">info</span>
+      <span class="mr-2 text-left flex-auto text-sm">
+        This is a non-official interface for the
+        citymayor smart contract
+      </span>
+      <a href="https://www.citymayor.co" target="_blank">
+        <svg
+          class="fill-current opacity-75 h-4 w-4"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 20 20"
+        >
+          <path
+            d="M12.95 10.707l.707-.707L8 4.343 6.586 5.757 10.828 10l-4.242 4.243L8 15.657l4.95-4.95z"
+          />
+        </svg>
+      </a>
+    </div>
+  </div>
+
   <main>
-    <router-view />
+    <section class="text-gray-600 body-font">
+      <div class="container px-5 mx-auto">
+        <router-view />
+      </div>
+    </section>
   </main>
 
   <footer class="text-gray-600 body-font">
