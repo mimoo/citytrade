@@ -46,10 +46,10 @@ onMounted(async () => {
         >
           <path d="M5 5L5 5l5 10 10-5-10-5zM2 15l20 0" />
         </svg>
-        <span class="ml-3 text-xl">
+        <router-link :to="{ name: 'browse' }" class="ml-3 text-xl">
           City
           <span class="text-indigo-600">Trade</span>
-        </span>
+        </router-link>
       </a>
       <nav
         class="md:mr-auto md:ml-4 md:py-1 md:pl-4 md:border-l md:border-gray-400 flex flex-wrap items-center text-base justify-center"
@@ -80,7 +80,10 @@ onMounted(async () => {
       <span class="flex rounded-full bg-indigo-500 uppercase px-2 py-1 text-xs font-bold mr-3">info</span>
       <span class="mr-2 text-left flex-auto text-sm">
         This is a non-official interface for the
-        citymayor smart contract
+        <a
+          href="https://www.citymayor.co"
+          target="_blank"
+        >citymayor smart contract</a>
       </span>
       <a href="https://www.citymayor.co" target="_blank">
         <svg

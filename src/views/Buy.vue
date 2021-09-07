@@ -16,8 +16,8 @@ const { pending_desc, sold } = storeToRefs(store);
             <tr
               class="text-md font-semibold tracking-wide text-left text-gray-900 bg-gray-100 uppercase border-b border-gray-600"
             >
-              <th class="px-4 py-3">Name</th>
-              <th class="px-4 py-3">Age</th>
+              <th class="px-4 py-3">City</th>
+              <th class="px-4 py-3">Price</th>
               <th class="px-4 py-3">Status</th>
               <th class="px-4 py-3">Date</th>
             </tr>
@@ -109,6 +109,18 @@ const { pending_desc, sold } = storeToRefs(store);
             </tr>
           </tbody>
         </table>
+      </div>
+    </div>
+
+    <div class="px-5 py-5 bg-white flex flex-col xs:flex-row items-center xs:justify-between">
+      <span class="text-xs xs:text-sm text-gray-900">Showing 1 to 4 of 50 Entries</span>
+      <div class="inline-flex mt-2 xs:mt-0">
+        <button
+          class="text-sm bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-l"
+        >Prev</button>
+        <button
+          class="text-sm bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-r"
+        >Next</button>
       </div>
     </div>
   </section>
