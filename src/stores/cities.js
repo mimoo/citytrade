@@ -34,7 +34,10 @@ export const useStore = defineStore('main', {
     },
     actions: {
         async init() {
-            let contract = init_contract();
+            let contract = await init_contract();
+            if (contract == null) {
+                return;
+            }
 
             // get cities quickly
             this.cities = await get_cities(contract);
