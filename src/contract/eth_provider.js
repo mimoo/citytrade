@@ -2,7 +2,19 @@ import { ethers } from "ethers";
 
 // get metamask provider
 window.ethers = ethers;
-export const provider = new ethers.providers.Web3Provider(window.ethereum);
+
+// connects to metamask, or at least try
+function get_provider() {
+    try {
+        return new ethers.providers.Web3Provider(window.ethereum);
+    } catch (error) {
+        window.alert("you must have metamask to browse this page");
+        console.error(error);
+        return null;
+    }
+}
+
+export const provider = get_provider();
 window.provider = provider;
 
 // make sure metamask is connected to the right network
@@ -18,7 +30,15 @@ export async function check_network() {
 }
 
 // get a signer
-export const signer = provider.getSigner()
+function get_signer() {
+    if (provider !== null) {
+        return provider.getSigner();
+    } else {
+        return null;
+    }
+}
+
+export const signer = get_signer();
 window.signer = signer;
 
 // gets the address of the user

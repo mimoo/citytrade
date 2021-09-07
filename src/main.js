@@ -8,13 +8,15 @@ import { ethers } from 'ethers'
 import { provider } from './contract/eth_provider'
 
 // detect change of metamask account
-window.ethereum.on('accountsChanged', function (accounts) {
-  location.reload();
-})
+if (window.ethereum) {
+  window.ethereum.on('accountsChanged', function (accounts) {
+    location.reload();
+  })
 
-window.ethereum.on('chainChanged', function (networkId) {
-  location.reload();
-})
+  window.ethereum.on('chainChanged', function (networkId) {
+    location.reload();
+  })
+}
 
 // router config
 const router_config = {
@@ -23,7 +25,7 @@ const router_config = {
 };
 
 const router = createRouter(
-  (!import.meta.env.PROD) ? router_config : { base: "/citytrade/", ...router_config }
+  (import.meta.env.PROD) ? { history: createWebHistory("/citytrade/"), ...router_config } : router_config
 )
 
 // create app
