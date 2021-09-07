@@ -23,7 +23,7 @@ const router_config = {
 };
 
 const router = createRouter(
-  (import.meta.env.PROD) ? { base: "/citytrade/", ...router_config } : router_config
+  (!import.meta.env.PROD) ? router_config : { base: "/citytrade/", ...router_config }
 )
 
 // create app
