@@ -80,6 +80,18 @@ export class Blockchain {
         }
         return await this.signer.getAddress();
     }
+
+    async ens_name(address) {
+        if (!this.provider) {
+            return null;
+        }
+        let name = await this.provider.lookupAddress(address);
+        if (name == null) {
+            return address.substr(0, 10) + "...";
+        } else {
+            return name;
+        }
+    }
 }
 
 //
