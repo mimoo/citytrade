@@ -2,7 +2,7 @@
 
 import { useStore } from '@/stores/cities'
 import { ref, onMounted, watch, toRefs } from 'vue'
-import { get_provider, get_signer, user_address } from '@/contract/eth_provider'
+import { Blockchain, get_provider, get_signer, user_address } from '@/contract/eth_provider'
 import { init_contract } from '@/contract/citymayor'
 
 const store = useStore();
@@ -16,10 +16,16 @@ function requestEthereum() {
   window.ethereum.request({ method: 'eth_requestAccounts' });
 }
 
+window.blockchain = new Blockchain();
+
 onMounted(async () => {
+  // init blockchain
+  await window.blockchain.init();
+
+  //
   const provider = await get_provider();
   const contract = await init_contract(provider);
-  const { signer, contract_signer } = await get_signer(provider, contract);
+  const { signer, contract_signer } = get_signer(provider, contract);
 
   window.signer = signer;
   window.contract_signer = contract_signer;
