@@ -1,38 +1,55 @@
 <script setup>
 
 import { useStore } from '@/stores/cities'
-import { ref, onMounted, watch, toRefs } from 'vue'
-import { Blockchain, get_provider, get_signer, user_address } from '@/contract/eth_provider'
+import { getCurrentInstance, ref, onMounted, watch, toRefs } from 'vue'
+import { get_provider, check_network, get_signer, user_address } from '@/contract/eth_provider'
 import { init_contract } from '@/contract/citymayor'
 
+// store
 const store = useStore();
-store.init();
 
-let counter = ref(0)
-
+// vars
+let state = ref("not_initialized");
 let user = ref(null);
 
-function requestEthereum() {
-  window.ethereum.request({ method: 'eth_requestAccounts' });
+// connect metamask
+function connect_metamask() {
+  if (window.ethereum) {
+    window.ethereum.request({ method: 'eth_requestAccounts' });
+  }
 }
 
-window.blockchain = new Blockchain();
-
 onMounted(async () => {
-  // init blockchain
-  await window.blockchain.init();
-
-  //
+  // init provider
   const provider = await get_provider();
-  const contract = await init_contract(provider);
-  const { signer, contract_signer } = get_signer(provider, contract);
+  if (!provider) {
+    state.value = "could not connect to the blockchain";
+    return;
+  }
 
+  // check network
+  if (!await check_network(provider)) {
+    state.value = "you are on the wrong network. Citytrade is on the ethereum main network"
+    return;
+  }
+
+  // init contract
+  const contract = await init_contract(provider);
+
+  // init signer
+  const { signer, contract_signer } = get_signer(provider, contract);
   window.signer = signer;
   window.contract_signer = contract_signer;
 
+  // initialized
+  state.value = "initialized";
+
+  // init store
+  store.init(provider, contract);
+
+  // get user address
   const res = await user_address(signer)
   user.value = res.substr(0, 10) + "...";
-  console.log(res);
 });
 </script>
 
@@ -72,7 +89,7 @@ onMounted(async () => {
       >
         <span v-if="user">{{ user }}</span>
         <span v-else>
-          <a href="#" @click="requestEthereum">Connect Metamask</a>
+          <a href="#" @click="connect_metamask">Connect Metamask</a>
         </span>
       </button>
     </div>
@@ -105,14 +122,28 @@ onMounted(async () => {
     </div>
   </div>
 
+  <!-- main -->
   <main>
     <section class="text-gray-600 body-font">
       <div class="container px-5 mx-auto">
-        <router-view />
+        <div v-if="state == 'not_initialized'">
+          <div
+            style="border-top-color:transparent"
+            class="w-16 h-16 border-4 border-blue-400 border-dotted rounded-full animate-spin m-auto"
+          ></div>
+        </div>
+        <div v-else-if="state == 'initialized'">
+          <router-view />
+        </div>
+        <div v-else>
+          **Error**: {{ state }}. You need to install
+          <a href="https://metamask.io/">Metamask</a>.
+        </div>
       </div>
     </section>
   </main>
 
+  <!-- footer -->
   <footer class="text-gray-600 body-font">
     <div class="container px-5 py-8 mx-auto flex items-center sm:flex-row flex-col">
       <a
