@@ -28,8 +28,29 @@ export const useStore = defineStore('main', {
         users: {},
     }),
     getters: {
+        get_offers: (state) => {
+            let offers = Array.from(state.offers).map(([offer_id, offer]) => {
+                const city_id = offer.cityId.toString();
+                const { name, countryId, _ } = state.cities.get(city_id);
+                const country = state.countries.get(countryId.toString()).name;
+                const price = ethers.utils.formatEther(offer.price.toString());
+                let owner = offer.owner;
+                if (owner && owner.length > 10) {
+                    owner = owner.substr(0, 10) + '...';
+                }
+                return {
+                    id: offer_id,
+                    city_id,
+                    city: name,
+                    country,
+                    price,
+                    from: offer.offererAddress,
+                    to: owner,
+                }
+            });
+            return offers;
+        },
         get_cities: (state) => {
-            // convert cities types
             let cities = Array.from(state.cities).map(([city_id, city]) => {
                 const buy_for = (!city.buy_for) ? 0 : ethers.utils.formatEther(city.buy_for.toString());
                 const last_purchase_price = (!city.last_purchase_price) ? 0 : ethers.utils.formatEther(city.last_purchase_price.toString());
@@ -113,48 +134,6 @@ export const useStore = defineStore('main', {
         num_cities() {
             return this.get_cities.length;
         },
-        pending: (state) => {
-            let offers = Array.from(state.offers).map(([offer_id, offer]) => {
-                const price = ethers.utils.formatEther(offer.price.toString());
-                return {
-                    id: offer_id,
-                    offererAddress: offer.offererAddress,
-                };
-            });
-            offers.sort();
-            return offers;
-        },
-        pending_desc() {
-            /*
-            let pending = this.pending;
-            pending.sort((offer1, offer2) =>
-                (offer1.price.gt(offer2.price)) ? -1 : 1
-            );
-            return pending;
-            */
-        },
-        sold: (state) => {
-            /*
-            console.log("debuf_f", state.offers.sold);
-            let sold = state.offers.sold.map(offer => {
-                let city_id = offer.args.cityId.toString();
-                let city = state.cities[city_id];
-                if (!city) {
-                    console.log("city not found")
-                    return offer;
-                }
-                let name = city.name;
-                let price_str = ethers.utils.formatEther(offer.args.price.toString());
-                let previous_owner = offer.args.previousOwner;
-                let new_owner = offer.args.newOwner;
-                let offer_id = offer.args.offerId.toString();
-                return { name, price_str, city_id, offer_id, previous_owner, new_owner, ...offer };
-            });
-            sold.reverse();
-            return sold;
-            */
-        }
-        //
     },
     actions: {
         async init(provider, contract) {

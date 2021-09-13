@@ -1,5 +1,5 @@
 import Browse from './views/Browse.vue'
-import Buy from './views/Buy.vue'
+import Trade from './views/Trade.vue'
 import HowTo from './views/HowTo.vue'
 import Map from './views/Map.vue'
 import NotFound from './views/NotFound.vue'
@@ -14,35 +14,23 @@ export const routes = [
   },
   {
     name: 'buy',
-    path: '/Buy',
+    path: '/trade',
     meta: { title: 'Buy' },
-    component: Buy,
+    component: Trade,
     // example of route level code-splitting
     // this generates a separate chunk (Buy.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     // component: () => import('./views/Buy.vue')
   },
   {
-    name: 'sell',
-    path: '/HowTo',
-    meta: { title: 'HowTo' },
-    component: HowTo,
-  },
-  {
-    name: 'wallet',
-    path: '/HowTo',
-    meta: { title: 'HowTo' },
-    component: HowTo,
-  },
-  {
     name: 'howto',
-    path: '/HowTo',
+    path: '/hotwo',
     meta: { title: 'HowTo' },
     component: HowTo,
   },
   {
     name: 'map',
-    path: '/Map',
+    path: '/map',
     meta: { title: 'Map' },
     component: Map,
   },

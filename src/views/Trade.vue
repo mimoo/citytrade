@@ -2,8 +2,11 @@
 import { storeToRefs } from 'pinia'
 import { useStore } from '@/stores/cities'
 
+// store
 const store = useStore();
-const { pending_desc, sold } = storeToRefs(store);
+
+// offers
+const { get_offers, sold } = storeToRefs(store);
 
 </script>
 
@@ -25,25 +28,28 @@ const { pending_desc, sold } = storeToRefs(store);
 
           <tbody class="bg-white">
             <!-- pending first -->
-            <tr class="text-gray-700" v-for="offer in pending_desc">
+            <tr class="text-gray-700" v-for="offer in get_offers">
               <td class="px-4 py-3 border">
                 <div class="flex items-center text-sm">
                   <div class="relative w-8 h-8 mr-3 rounded-full md:block">
                     <img
                       class="object-cover w-full h-full rounded-full"
-                      :src="'https://source.unsplash.com/random/50x50/?city,' + offer.name"
+                      :src="'https://source.unsplash.com/random/50x50/?city,' + offer.city + ',' + offer.country"
                       alt
                       loading="lazy"
                     />
                     <div class="absolute inset-0 rounded-full shadow-inner" aria-hidden="true"></div>
                   </div>
                   <div>
-                    <p class="font-semibold text-black">{{ offer.name }}</p>
-                    <p class="text-xs text-gray-600">by {{ offer.from_ens }}</p>
+                    <p class="font-semibold text-black">
+                      {{ offer.city }} ({{ offer.country }})
+                      <small>owned by {{ offer.to }}</small>
+                    </p>
+                    <p class="text-xs text-gray-600">by {{ offer.from }}</p>
                   </div>
                 </div>
               </td>
-              <td class="px-4 py-3 text-ms font-semibold border">{{ offer.price_str }} ETH</td>
+              <td class="px-4 py-3 text-ms font-semibold border">{{ offer.price }} ETH</td>
               <td class="px-4 py-3 text-xs border">
                 <span
                   class="px-2 py-1 font-semibold leading-tight text-orange-700 bg-gray-100 rounded-sm"

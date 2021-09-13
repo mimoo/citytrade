@@ -1,12 +1,14 @@
 <script setup>
 
 import { useStore } from '@/stores/cities'
+import { storeToRefs } from 'pinia'
 import { getCurrentInstance, ref, onMounted, watch, toRefs } from 'vue'
 import { get_provider, check_network, get_signer, user_address } from '@/contract/eth_provider'
 import { init_contract } from '@/contract/citymayor'
 
 // store
 const store = useStore();
+const { initialized } = storeToRefs(store);
 
 // vars
 let state = ref("not_initialized");
@@ -124,7 +126,7 @@ onMounted(async () => {
   <main>
     <section class="text-gray-600 body-font">
       <div class="container px-5 mx-auto">
-        <div v-if="state == 'not_initialized'">
+        <div v-if="state == 'not_initialized' || !initialized">
           <div
             style="border-top-color:transparent"
             class="w-16 h-16 border-4 border-blue-400 border-dotted rounded-full animate-spin m-auto"
