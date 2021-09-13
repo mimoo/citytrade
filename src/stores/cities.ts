@@ -31,13 +31,17 @@ export const useStore = defineStore('main', {
         get_offers: (state) => {
             let offers = Array.from(state.offers).map(([offer_id, offer]) => {
                 const city_id = offer.cityId.toString();
-                const { name, countryId, _ } = state.cities.get(city_id);
+                const { name, countryId } = state.cities.get(city_id);
                 const country = state.countries.get(countryId.toString()).name;
                 const raw_price = offer.price;
                 const price = ethers.utils.formatEther(raw_price.toString());
                 let owner = offer.owner;
                 if (owner && owner.length > 10) {
                     owner = owner.substr(0, 10) + '...';
+                }
+                let offererAddress = offer.offererAddress;
+                if (offererAddress && offererAddress.length > 10) {
+                    offererAddress = offererAddress.substr(0, 10) + '...';
                 }
                 const blockNumber = offer.blockNumber;
                 const transactionHash = offer.transactionHash;
@@ -48,13 +52,44 @@ export const useStore = defineStore('main', {
                     country,
                     raw_price,
                     price,
-                    from: offer.offererAddress,
+                    from: offererAddress,
                     to: owner,
                     blockNumber,
                     transactionHash,
                 }
             });
             return offers;
+        },
+        get_sold: (state) => {
+            let offers = Array.from(state.events.city_sold).map((e) => {
+                let { cityId, price, previousOwner, newOwner, offerId } = e.args;
+                const city_id = cityId.toString();
+                const { name, countryId } = state.cities.get(city_id);
+                const country = state.countries.get(countryId.toString()).name;
+                const raw_price = price;
+                price = ethers.utils.formatEther(raw_price.toString());
+                if (previousOwner && previousOwner.length > 10) {
+                    previousOwner = previousOwner.substr(0, 10) + '...';
+                }
+                if (newOwner && newOwner.length > 10) {
+                    newOwner = newOwner.substr(0, 10) + '...';
+                }
+                const blockNumber = e.blockNumber;
+                const transactionHash = e.transactionHash;
+                return {
+                    id: offerId.toString(),
+                    city_id,
+                    city: name,
+                    country,
+                    raw_price,
+                    price,
+                    previous: previousOwner,
+                    new: newOwner,
+                    blockNumber,
+                    transactionHash,
+                }
+            });
+            return offers.reverse();
         },
         best_offers() {
             let offers = this.get_offers;
@@ -229,7 +264,7 @@ export const useStore = defineStore('main', {
             // done processing events
             this.initialized = true;
         },
-        async process_new_city(contract, { cityId, name, price, countryId, _ }) {
+        async process_new_city(contract, { cityId, name, price, countryId }) {
             if (!this.countries.has(countryId.toString())) {
                 const name = await get_country(contract, countryId);
                 this.$patch((state) => {
@@ -259,17 +294,17 @@ export const useStore = defineStore('main', {
                 });
             });
         },
-        process_city_for_sale({ cityId, price, _ }) {
+        process_city_for_sale({ cityId, price }) {
             this.$patch((state) => {
                 state.cities.get(cityId.toString()).buy_for = price;
             });
         },
-        process_city_not_for_sale({ cityId, _ }) {
+        process_city_not_for_sale({ cityId }) {
             this.$patch((state) => {
                 state.cities.get(cityId.toString()).buy_for = null;
             });
         },
-        async process_offer_for_city(provider, blockNumber, transactionHash, { offerId, cityId, price, offererAddress, owner, _ }) {
+        async process_offer_for_city(provider, blockNumber, transactionHash, { offerId, cityId, price, offererAddress, owner }) {
             // any new user?
             if (GET_USERNAME) {
                 for (const _owner of [offererAddress, owner]) {
@@ -297,7 +332,7 @@ export const useStore = defineStore('main', {
                 });
             });
         },
-        process_cancel_offer_for_city({ offerId, _ }) {
+        process_cancel_offer_for_city({ offerId }) {
             const city_id = this.offers.get(offerId.toString()).cityId.toString();
             const offers = this.cities.get(city_id).offers.filter(id => id != offerId);
             this.$patch((state) => {
@@ -305,7 +340,7 @@ export const useStore = defineStore('main', {
                 state.offers.delete(offerId.toString());
             });
         },
-        async process_city_sold(provider, { cityId, price, previousOwner, newOwner, offerId, _ }) {
+        async process_city_sold(provider, { cityId, price, previousOwner, newOwner, offerId }) {
             // any new users?
             if (GET_USERNAME) {
                 for (const owner of [previousOwner, newOwner]) {

@@ -6,7 +6,7 @@ import { useStore } from '@/stores/cities'
 const store = useStore();
 
 // offers
-const { best_offers, sold } = storeToRefs(store);
+const { best_offers, get_sold } = storeToRefs(store);
 
 </script>
 
@@ -63,61 +63,39 @@ const { best_offers, sold } = storeToRefs(store);
             </tr>
 
             <!-- sold -->
-            <tr class="text-gray-700" v-for="offer in sold">
+            <tr class="text-gray-700" v-for="offer in get_sold">
               <td class="px-4 py-3 border">
                 <div class="flex items-center text-sm">
                   <div class="relative w-8 h-8 mr-3 rounded-full md:block">
                     <img
                       class="object-cover w-full h-full rounded-full"
-                      :src="'https://source.unsplash.com/random/50x50/?city,' + offer.name"
+                      :src="'https://source.unsplash.com/random/50x50/?city,' + offer.city + ',' + offer.country"
                       alt
                       loading="lazy"
                     />
                     <div class="absolute inset-0 rounded-full shadow-inner" aria-hidden="true"></div>
                   </div>
                   <div>
-                    <p class="font-semibold text-black">{{ offer.name }}</p>
-                    <p class="text-xs text-gray-600">bought by {{ offer.new_owner }}</p>
-                    <p class="text-xs text-gray-600">sold by {{ offer.previous_owner }}</p>
+                    <p class="font-semibold text-black">{{ offer.city }} ({{ offer.country }})</p>
+                    <p class="text-xs text-gray-600">bought by {{ offer.new }}</p>
+                    <p class="text-xs text-gray-600">
+                      <span v-if="offer.previous == '0x00000000...'">acquired for the first time</span>
+                      <span v-else>sold by {{ offer.previous }}</span>
+                    </p>
                   </div>
                 </div>
               </td>
-              <td class="px-4 py-3 text-ms font-semibold border">{{ offer.price_str }} ETH</td>
+              <td class="px-4 py-3 text-ms font-semibold border">{{ offer.price }} ETH</td>
               <td class="px-4 py-3 text-xs border">
                 <span
                   class="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-sm"
                 >Sold</span>
               </td>
               <td class="px-4 py-3 text-sm border">
-                <a :href="'https://etherscan.io/block/' + offer.date">{{ offer.date }}</a>
+                <a
+                  :href="'https://etherscan.io/tx/' + offer.transactionHash"
+                >{{ offer.blockNumber }}</a>
               </td>
-            </tr>
-
-            <tr class="text-gray-700">
-              <td class="px-4 py-3 border">
-                <div class="flex items-center text-sm">
-                  <div class="relative w-8 h-8 mr-3 rounded-full">
-                    <img
-                      class="object-cover w-full h-full rounded-full"
-                      src="https://images.pexels.com/photos/5212324/pexels-photo-5212324.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260"
-                      alt
-                      loading="lazy"
-                    />
-                    <div class="absolute inset-0 rounded-full shadow-inner" aria-hidden="true"></div>
-                  </div>
-                  <div>
-                    <p class="font-semibold">Nora</p>
-                    <p class="text-xs text-gray-600">Designer</p>
-                  </div>
-                </div>
-              </td>
-              <td class="px-4 py-3 text-md font-semibold border">17</td>
-              <td class="px-4 py-3 text-xs border">
-                <span
-                  class="px-2 py-1 font-semibold leading-tight text-red-700 bg-red-100 rounded-sm"
-                >Cancelled (by owner)</span>
-              </td>
-              <td class="px-4 py-3 text-sm border">6/10/2020</td>
             </tr>
           </tbody>
         </table>
