@@ -18,7 +18,7 @@ const cities = computed(() => store.get_priciest_cities.slice(page.value * per_p
 </script>
 
 <template>
-  hotest cities | priciest cities | alphabetic order
+  hotest cities | priciest cities | alphabetic order |
   <router-link :to="{ name: 'map' }" class="mr-5 hover:text-gray-900">map</router-link>
   <div class="h-1 bg-gray-200 rounded overflow-hidden mt-3">
     <div class="w-24 h-full bg-indigo-500"></div>
