@@ -55,7 +55,11 @@ const { best_offers, sold } = storeToRefs(store);
                   class="px-2 py-1 font-semibold leading-tight text-orange-700 bg-gray-100 rounded-sm"
                 >Pending</span>
               </td>
-              <td class="px-4 py-3 text-sm border">6/4/2000</td>
+              <td class="px-4 py-3 text-sm border">
+                <a
+                  :href="'https://etherscan.io/tx/' + offer.transactionHash"
+                >{{ offer.blockNumber }}</a>
+              </td>
             </tr>
 
             <!-- sold -->
@@ -84,7 +88,9 @@ const { best_offers, sold } = storeToRefs(store);
                   class="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-sm"
                 >Sold</span>
               </td>
-              <td class="px-4 py-3 text-sm border">6/4/2000</td>
+              <td class="px-4 py-3 text-sm border">
+                <a :href="'https://etherscan.io/block/' + offer.date">{{ offer.date }}</a>
+              </td>
             </tr>
 
             <tr class="text-gray-700">

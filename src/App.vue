@@ -28,6 +28,7 @@ onMounted(async () => {
     state.value = "could not connect to the blockchain";
     return;
   }
+  window.provider = provider;
 
   // check network
   if (!await check_network(provider)) {
@@ -38,20 +39,22 @@ onMounted(async () => {
   // init contract
   const contract = await init_contract(provider);
 
-  // init signer
-  const { signer, contract_signer } = get_signer(provider, contract);
-  window.signer = signer;
-  window.contract_signer = contract_signer;
-
   // initialized
   state.value = "initialized";
 
   // init store
   store.init(provider, contract);
 
-  // get user address
-  const res = await user_address(signer)
-  user.value = res.substr(0, 10) + "...";
+  // init signer
+  if (provider.getSigner) {
+    const { signer, contract_signer } = get_signer(provider, contract);
+    window.signer = signer;
+    window.contract_signer = contract_signer;
+
+    // get user address
+    const res = await user_address(signer)
+    user.value = res.substr(0, 10) + "...";
+  }
 });
 </script>
 

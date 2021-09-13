@@ -39,6 +39,8 @@ export const useStore = defineStore('main', {
                 if (owner && owner.length > 10) {
                     owner = owner.substr(0, 10) + '...';
                 }
+                const blockNumber = offer.blockNumber;
+                const transactionHash = offer.transactionHash;
                 return {
                     id: offer_id,
                     city_id,
@@ -48,6 +50,8 @@ export const useStore = defineStore('main', {
                     price,
                     from: offer.offererAddress,
                     to: owner,
+                    blockNumber,
+                    transactionHash,
                 }
             });
             return offers;
@@ -204,7 +208,7 @@ export const useStore = defineStore('main', {
                         break;
                     // event OfferForCity(uint256 offerId, uint16 cityId, uint256 price, address offererAddress, address owner);                        
                     case 'OfferForCity':
-                        await this.process_offer_for_city(provider, e.args);
+                        await this.process_offer_for_city(provider, e.blockNumber, e.transactionHash, e.args);
                         break;
                     // event CancelOfferForCity(uint256 offerId);
                     case 'CancelOfferForCity':
@@ -265,7 +269,7 @@ export const useStore = defineStore('main', {
                 state.cities.get(cityId.toString()).buy_for = null;
             });
         },
-        async process_offer_for_city(provider, { offerId, cityId, price, offererAddress, owner, _ }) {
+        async process_offer_for_city(provider, blockNumber, transactionHash, { offerId, cityId, price, offererAddress, owner, _ }) {
             // any new user?
             if (GET_USERNAME) {
                 for (const _owner of [offererAddress, owner]) {
@@ -288,6 +292,8 @@ export const useStore = defineStore('main', {
                     price,
                     offererAddress,
                     owner,
+                    blockNumber,
+                    transactionHash,
                 });
             });
         },
