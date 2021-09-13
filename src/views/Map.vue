@@ -56,7 +56,7 @@ const cities_with_coords = computed(() => {
         return { ...c, lat, lon };
     });
 });
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           </script>
+</script>
 
 <template>
     <div style="height: 75vh; width: vw">
