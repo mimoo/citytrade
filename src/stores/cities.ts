@@ -33,7 +33,8 @@ export const useStore = defineStore('main', {
                 const city_id = offer.cityId.toString();
                 const { name, countryId, _ } = state.cities.get(city_id);
                 const country = state.countries.get(countryId.toString()).name;
-                const price = ethers.utils.formatEther(offer.price.toString());
+                const raw_price = offer.price;
+                const price = ethers.utils.formatEther(raw_price.toString());
                 let owner = offer.owner;
                 if (owner && owner.length > 10) {
                     owner = owner.substr(0, 10) + '...';
@@ -43,12 +44,26 @@ export const useStore = defineStore('main', {
                     city_id,
                     city: name,
                     country,
+                    raw_price,
                     price,
                     from: offer.offererAddress,
                     to: owner,
                 }
             });
             return offers;
+        },
+        best_offers() {
+            let offers = this.get_offers;
+
+            offers.sort((c1, c2) => {
+                if (c1.raw_price.gt(c2.raw_price)) {
+                    return 1;
+                } else {
+                    return -1;
+                }
+            });
+
+            return offers.reverse();
         },
         get_cities: (state) => {
             let cities = Array.from(state.cities).map(([city_id, city]) => {

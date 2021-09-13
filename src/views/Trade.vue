@@ -6,7 +6,7 @@ import { useStore } from '@/stores/cities'
 const store = useStore();
 
 // offers
-const { get_offers, sold } = storeToRefs(store);
+const { best_offers, sold } = storeToRefs(store);
 
 </script>
 
@@ -28,7 +28,7 @@ const { get_offers, sold } = storeToRefs(store);
 
           <tbody class="bg-white">
             <!-- pending first -->
-            <tr class="text-gray-700" v-for="offer in get_offers">
+            <tr class="text-gray-700" v-for="offer in best_offers">
               <td class="px-4 py-3 border">
                 <div class="flex items-center text-sm">
                   <div class="relative w-8 h-8 mr-3 rounded-full md:block">
