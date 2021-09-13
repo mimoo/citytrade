@@ -8,7 +8,7 @@ import NotFound from './views/NotFound.vue'
 export const routes = [
   {
     name: 'browse',
-    path: '/',
+    path: '/:page(\\d+)?',
     component: Browse,
     meta: { title: 'Browse' }
   },
