@@ -60,13 +60,8 @@ const cities_with_coords = computed(() => {
 
 <template>
     <div style="height: 75vh; width: vw">
-        <l-map
-            v-model="zoom"
-            v-model:zoom="zoom"
-            :center="[47.41322, -1.219482]"
-            @move="log('move')"
-        >
-            <l-tile-layer url="http://c.tile.stamen.com/watercolor/{z}/{x}/{y}.png"></l-tile-layer>
+        <l-map v-model="zoom" v-model:zoom="zoom" :center="[47.41322, -1.219482]">
+            <l-tile-layer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"></l-tile-layer>
 
             <l-marker
                 v-for="city in cities_with_coords"
