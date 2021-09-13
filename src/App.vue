@@ -79,9 +79,7 @@ onMounted(async () => {
       >
         <router-link :to="{ name: 'browse' }" class="mr-5 hover:text-gray-900">Browse</router-link>
 
-        <router-link :to="{ name: 'buy' }" class="mr-5 hover:text-gray-900">Buy</router-link>
-        <router-link :to="{ name: 'sell' }" class="mr-5 hover:text-gray-900">Sell</router-link>
-        <router-link :to="{ name: 'wallet' }" class="mr-5 hover:text-gray-900">CITY wallet</router-link>
+        <router-link :to="{ name: 'buy' }" class="mr-5 hover:text-gray-900">Trade</router-link>
         <router-link :to="{ name: 'howto' }" class="mr-5 hover:text-gray-900">How to?</router-link>
       </nav>
       <button

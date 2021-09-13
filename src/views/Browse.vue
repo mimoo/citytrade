@@ -12,7 +12,7 @@ const store = useStore();
 const { initialized } = storeToRefs(store);
 
 // cities + pagination
-const page = computed(() => Number.parseInt(route.params.page || "0", 10) - 1);
+const page = computed(() => Number.parseInt(route.params.page || "1", 10) - 1);
 const per_page = 20;
 const pages = computed(() => Math.ceil(store.num_cities / per_page));
 const cities = computed(() => store.get_priciest_cities.slice(page.value * per_page, (page.value + 1) * per_page));
