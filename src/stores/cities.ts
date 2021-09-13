@@ -5,10 +5,10 @@ import { ethers } from 'ethers';
 
 // TODO: dump known ENS names in a json or something
 const GET_USERNAME = false;
+const GET_CITY_COORDS = false;
 
 const CACHED_COUNTRIES =
     [["0", { "name": "France", "cities": [{ "type": "BigNumber", "hex": "0x00" }, { "type": "BigNumber", "hex": "0x12" }, { "type": "BigNumber", "hex": "0x2e" }, { "type": "BigNumber", "hex": "0x4b" }, { "type": "BigNumber", "hex": "0x4c" }, { "type": "BigNumber", "hex": "0x58" }, { "type": "BigNumber", "hex": "0x59" }, { "type": "BigNumber", "hex": "0x5d" }, { "type": "BigNumber", "hex": "0x5e" }, { "type": "BigNumber", "hex": "0x72" }, { "type": "BigNumber", "hex": "0x75" }] }], ["1", { "name": "Russia", "cities": [{ "type": "BigNumber", "hex": "0x01" }, { "type": "BigNumber", "hex": "0x5f" }, { "type": "BigNumber", "hex": "0x60" }, { "type": "BigNumber", "hex": "0x61" }, { "type": "BigNumber", "hex": "0x62" }, { "type": "BigNumber", "hex": "0x64" }, { "type": "BigNumber", "hex": "0x68" }, { "type": "BigNumber", "hex": "0x69" }, { "type": "BigNumber", "hex": "0x6a" }, { "type": "BigNumber", "hex": "0x6b" }, { "type": "BigNumber", "hex": "0x6c" }, { "type": "BigNumber", "hex": "0x6d" }, { "type": "BigNumber", "hex": "0x6e" }, { "type": "BigNumber", "hex": "0x6f" }, { "type": "BigNumber", "hex": "0x70" }, { "type": "BigNumber", "hex": "0x90" }] }], ["2", { "name": "China", "cities": [{ "type": "BigNumber", "hex": "0x02" }, { "type": "BigNumber", "hex": "0x13" }, { "type": "BigNumber", "hex": "0x15" }, { "type": "BigNumber", "hex": "0x17" }] }], ["3", { "name": "England", "cities": [{ "type": "BigNumber", "hex": "0x03" }, { "type": "BigNumber", "hex": "0x30" }, { "type": "BigNumber", "hex": "0x40" }, { "type": "BigNumber", "hex": "0x4a" }, { "type": "BigNumber", "hex": "0x57" }, { "type": "BigNumber", "hex": "0x74" }] }], ["5", { "name": "United States", "cities": [{ "type": "BigNumber", "hex": "0x04" }, { "type": "BigNumber", "hex": "0x11" }, { "type": "BigNumber", "hex": "0x14" }, { "type": "BigNumber", "hex": "0x28" }, { "type": "BigNumber", "hex": "0x2f" }, { "type": "BigNumber", "hex": "0x33" }, { "type": "BigNumber", "hex": "0x63" }, { "type": "BigNumber", "hex": "0x80" }, { "type": "BigNumber", "hex": "0x82" }, { "type": "BigNumber", "hex": "0x86" }, { "type": "BigNumber", "hex": "0x87" }, { "type": "BigNumber", "hex": "0x8b" }] }], ["6", { "name": "Canada", "cities": [{ "type": "BigNumber", "hex": "0x05" }, { "type": "BigNumber", "hex": "0x20" }, { "type": "BigNumber", "hex": "0x27" }, { "type": "BigNumber", "hex": "0x32" }, { "type": "BigNumber", "hex": "0x34" }, { "type": "BigNumber", "hex": "0x77" }, { "type": "BigNumber", "hex": "0x78" }, { "type": "BigNumber", "hex": "0x79" }] }], ["7", { "name": "South Korea", "cities": [{ "type": "BigNumber", "hex": "0x06" }, { "type": "BigNumber", "hex": "0x97" }, { "type": "BigNumber", "hex": "0xa0" }, { "type": "BigNumber", "hex": "0xa1" }, { "type": "BigNumber", "hex": "0xa2" }, { "type": "BigNumber", "hex": "0xa3" }, { "type": "BigNumber", "hex": "0xa4" }, { "type": "BigNumber", "hex": "0xa5" }] }], ["8", { "name": "Japan", "cities": [{ "type": "BigNumber", "hex": "0x07" }, { "type": "BigNumber", "hex": "0x38" }] }], ["9", { "name": "Romania", "cities": [{ "type": "BigNumber", "hex": "0x08" }, { "type": "BigNumber", "hex": "0x09" }, { "type": "BigNumber", "hex": "0xa7" }] }], ["10", { "name": "Netherlands", "cities": [{ "type": "BigNumber", "hex": "0x0a" }, { "type": "BigNumber", "hex": "0x98" }] }], ["11", { "name": "Spain", "cities": [{ "type": "BigNumber", "hex": "0x0b" }, { "type": "BigNumber", "hex": "0x2b" }, { "type": "BigNumber", "hex": "0x67" }, { "type": "BigNumber", "hex": "0x99" }, { "type": "BigNumber", "hex": "0x9e" }] }], ["12", { "name": "Germany", "cities": [{ "type": "BigNumber", "hex": "0x0c" }, { "type": "BigNumber", "hex": "0x31" }, { "type": "BigNumber", "hex": "0x91" }, { "type": "BigNumber", "hex": "0x9a" }] }], ["13", { "name": "North Korea", "cities": [{ "type": "BigNumber", "hex": "0x0d" }] }], ["14", { "name": "Singapore", "cities": [{ "type": "BigNumber", "hex": "0x0e" }] }], ["15", { "name": "United Arab Emirates", "cities": [{ "type": "BigNumber", "hex": "0x0f" }, { "type": "BigNumber", "hex": "0x21" }] }], ["16", { "name": "Sweden", "cities": [{ "type": "BigNumber", "hex": "0x10" }, { "type": "BigNumber", "hex": "0xa8" }] }], ["17", { "name": "Taiwan", "cities": [{ "type": "BigNumber", "hex": "0x16" }, { "type": "BigNumber", "hex": "0x8d" }, { "type": "BigNumber", "hex": "0x9b" }] }], ["18", { "name": "India", "cities": [{ "type": "BigNumber", "hex": "0x18" }, { "type": "BigNumber", "hex": "0x53" }, { "type": "BigNumber", "hex": "0x54" }, { "type": "BigNumber", "hex": "0x55" }] }], ["19", { "name": "Morocco", "cities": [{ "type": "BigNumber", "hex": "0x19" }, { "type": "BigNumber", "hex": "0x56" }] }], ["20", { "name": "Brazil", "cities": [{ "type": "BigNumber", "hex": "0x1a" }, { "type": "BigNumber", "hex": "0x4f" }, { "type": "BigNumber", "hex": "0x93" }] }], ["21", { "name": "Argentina", "cities": [{ "type": "BigNumber", "hex": "0x1b" }, { "type": "BigNumber", "hex": "0x88" }] }], ["22", { "name": "Congo", "cities": [{ "type": "BigNumber", "hex": "0x1c" }, { "type": "BigNumber", "hex": "0x9c" }, { "type": "BigNumber", "hex": "0x9d" }] }], ["23", { "name": "Australia", "cities": [{ "type": "BigNumber", "hex": "0x1d" }, { "type": "BigNumber", "hex": "0x29" }] }], ["24", { "name": "Kazakhstan", "cities": [{ "type": "BigNumber", "hex": "0x1e" }] }], ["25", { "name": "Turkey", "cities": [{ "type": "BigNumber", "hex": "0x1f" }] }], ["26", { "name": "Ukraine", "cities": [{ "type": "BigNumber", "hex": "0x22" }, { "type": "BigNumber", "hex": "0x7c" }, { "type": "BigNumber", "hex": "0x7d" }, { "type": "BigNumber", "hex": "0x7e" }, { "type": "BigNumber", "hex": "0x7f" }] }], ["27", { "name": "South Africa", "cities": [{ "type": "BigNumber", "hex": "0x23" }] }], ["28", { "name": "Thailand", "cities": [{ "type": "BigNumber", "hex": "0x24" }, { "type": "BigNumber", "hex": "0x2a" }] }], ["29", { "name": "Nigeria", "cities": [{ "type": "BigNumber", "hex": "0x25" }] }], ["30", { "name": "Iceland", "cities": [{ "type": "BigNumber", "hex": "0x26" }] }], ["31", { "name": "Tunisia", "cities": [{ "type": "BigNumber", "hex": "0x2c" }] }], ["33", { "name": "Hungary", "cities": [{ "type": "BigNumber", "hex": "0x2d" }] }], ["4", { "name": "Italy", "cities": [{ "type": "BigNumber", "hex": "0x35" }, { "type": "BigNumber", "hex": "0x39" }, { "type": "BigNumber", "hex": "0x5a" }, { "type": "BigNumber", "hex": "0x5b" }, { "type": "BigNumber", "hex": "0x96" }, { "type": "BigNumber", "hex": "0x9f" }] }], ["34", { "name": "Switzerland", "cities": [{ "type": "BigNumber", "hex": "0x36" }] }], ["37", { "name": "Botswana", "cities": [{ "type": "BigNumber", "hex": "0x37" }] }], ["35", { "name": "Finland", "cities": [{ "type": "BigNumber", "hex": "0x3a" }] }], ["36", { "name": "Norway", "cities": [{ "type": "BigNumber", "hex": "0x3b" }] }], ["38", { "name": "Namibia", "cities": [{ "type": "BigNumber", "hex": "0x3c" }] }], ["39", { "name": "Dominican Republic", "cities": [{ "type": "BigNumber", "hex": "0x3d" }] }], ["40", { "name": "Haiti", "cities": [{ "type": "BigNumber", "hex": "0x3e" }, { "type": "BigNumber", "hex": "0x3f" }] }], ["41", { "name": "Yemen", "cities": [{ "type": "BigNumber", "hex": "0x41" }] }], ["42", { "name": "Iran", "cities": [{ "type": "BigNumber", "hex": "0x42" }] }], ["43", { "name": "Afghanistan", "cities": [{ "type": "BigNumber", "hex": "0x43" }] }], ["44", { "name": "Mongolia", "cities": [{ "type": "BigNumber", "hex": "0x44" }] }], ["45", { "name": "New Zealand", "cities": [{ "type": "BigNumber", "hex": "0x45" }] }], ["46", { "name": "Peru", "cities": [{ "type": "BigNumber", "hex": "0x46" }, { "type": "BigNumber", "hex": "0x47" }, { "type": "BigNumber", "hex": "0x48" }] }], ["47", { "name": "Belgium", "cities": [{ "type": "BigNumber", "hex": "0x49" }, { "type": "BigNumber", "hex": "0x4d" }, { "type": "BigNumber", "hex": "0x5c" }, { "type": "BigNumber", "hex": "0x71" }, { "type": "BigNumber", "hex": "0x94" }] }], ["48", { "name": "Philippines", "cities": [{ "type": "BigNumber", "hex": "0x4e" }, { "type": "BigNumber", "hex": "0x51" }, { "type": "BigNumber", "hex": "0x52" }, { "type": "BigNumber", "hex": "0x8e" }] }], ["49", { "name": "Bolivia", "cities": [{ "type": "BigNumber", "hex": "0x50" }] }], ["50", { "name": "Colombia", "cities": [{ "type": "BigNumber", "hex": "0x65" }, { "type": "BigNumber", "hex": "0x66" }] }], ["51", { "name": "Zimbabwe", "cities": [{ "type": "BigNumber", "hex": "0x73" }] }], ["52", { "name": "Greenland", "cities": [{ "type": "BigNumber", "hex": "0x76" }] }], ["53", { "name": "Poland", "cities": [{ "type": "BigNumber", "hex": "0x7a" }, { "type": "BigNumber", "hex": "0x7b" }] }], ["54", { "name": "Nicaragua", "cities": [{ "type": "BigNumber", "hex": "0x81" }] }], ["56", { "name": "Mauritania", "cities": [{ "type": "BigNumber", "hex": "0x83" }] }], ["57", { "name": "Cameroon", "cities": [{ "type": "BigNumber", "hex": "0x84" }] }], ["58", { "name": "Malaysia", "cities": [{ "type": "BigNumber", "hex": "0x85" }] }], ["59", { "name": "Angola", "cities": [{ "type": "BigNumber", "hex": "0x89" }] }], ["60", { "name": "Madagascar", "cities": [{ "type": "BigNumber", "hex": "0x8a" }] }], ["62", { "name": "Egypt", "cities": [{ "type": "BigNumber", "hex": "0x8c" }] }], ["61", { "name": "Jordan", "cities": [{ "type": "BigNumber", "hex": "0x8f" }, { "type": "BigNumber", "hex": "0xa9" }] }], ["69", { "name": "Croatia", "cities": [{ "type": "BigNumber", "hex": "0x92" }] }], ["66", { "name": "Wales", "cities": [{ "type": "BigNumber", "hex": "0x95" }] }], ["70", { "name": "Czech Republic", "cities": [{ "type": "BigNumber", "hex": "0xa6" }] }]];
-
 
 export const useStore = defineStore('main', {
     state: () => ({
@@ -259,12 +259,27 @@ export const useStore = defineStore('main', {
                 }
             }
             console.log("finished processing all events");
-            //            console.log(JSON.stringify(Array.from(this.countries)));
+
+            // dump countries
+            // console.log(JSON.stringify(Array.from(this.countries)));
+
+            // dump cities coords
+            /*
+            const city_coords = Array.from(this.cities).map(([city_id, c]) => {
+                return {
+                    city_id,
+                    name: c.name,
+                    coords: c.coords,
+                };
+            });
+            console.log(JSON.stringify(city_coords));
+            */
 
             // done processing events
             this.initialized = true;
         },
         async process_new_city(contract, { cityId, name, price, countryId }) {
+            // add country
             if (!this.countries.has(countryId.toString())) {
                 const name = await get_country(contract, countryId);
                 this.$patch((state) => {
@@ -278,11 +293,17 @@ export const useStore = defineStore('main', {
                     state.countries.get(countryId.toString()).cities.push(cityId);
                 });
             }
+            // fetch coords
+            const country = this.countries.get(countryId.toString()).name;
+            if (GET_CITY_COORDS) {
+                const { lat, lon } = await get_city_coords(name, country);
+            }
+            // add city
             this.$patch((state) => {
                 state.cities.set(cityId.toString(), {
                     cityId,
                     countryId,
-                    name: name,
+                    name,
                     owner: null,
                     buy_for: price,
 
@@ -291,6 +312,12 @@ export const useStore = defineStore('main', {
                     previous_owner: null,
 
                     offers: [],
+                    /*
+                                        coords: {
+                                            lat,
+                                            lon,
+                                        },
+                                        */
                 });
             });
         },
@@ -375,3 +402,21 @@ export const useStore = defineStore('main', {
         }
     }
 })
+
+
+import axios from 'axios';
+
+async function get_city_coords(city, country) {
+    // 
+    const resp = await axios
+        .get(`https://nominatim.openstreetmap.org/search?q=${city},${country}&format=json`);
+    const data = resp.data;
+    if (data.length == 0) {
+        return null;
+    }
+
+    return {
+        lat: data[0].lat,
+        lon: data[0].lon
+    };
+}
